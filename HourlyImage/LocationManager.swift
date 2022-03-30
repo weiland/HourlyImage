@@ -5,7 +5,6 @@
 //  Created by Pascal on 30/03/2022.
 //
 
-import AppKit
 import CoreLocation
 import CoreWLAN
 

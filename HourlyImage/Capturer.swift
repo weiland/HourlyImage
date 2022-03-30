@@ -5,20 +5,9 @@
 //  Created by Pascal on 30/03/2022.
 //
 
-import Foundation
 import AVFoundation
 import CoreLocation
-import Cocoa
-import AppKit
 import MapKit
-import Darwin
-
-struct TwitterCredentials: Decodable {
-    var consumerKey: String
-    var consumerSecret: String
-    var oauthToken: String
-    var oauthTokenSecret: String
-}
 
 class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
     let lm = LocationManager()
@@ -36,23 +25,29 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yMMd_HH-MM-SS"
-        let fileName = dateFormatter.string(from: Date()) + "-webcam"
+        dateFormatter.dateFormat = Config.snapshotDateFormat
+        let fileName = dateFormatter.string(from: Date()) + Config.snapshotSuffix
 
         print(storeImageToDocumentDirectory(image: nsImage, fileName: fileName)!)
         
         Task.init {
-            await tweetImage(data: imageData.base64EncodedString())
-            print("really tweeted")
+            if Config.Twitter.enabled {
+                await tweetImage(data: imageData.base64EncodedString())
+                print("really tweeted")
+            }
+            
+            if Config.Shell.enabled {
+                Shell.scp(localDirectory: Config.Shell.localDirectory, server: Config.Shell.server, remoteDirectory: Config.Shell.remoteDirectory, sshKeyName: Config.Shell.sshKeyName)
+                print("finished shell")
+            }
+            
             await NSApp.terminate(self)
         }
-        
-//        stopSession()
     }
     
     public func storeImageToDocumentDirectory(image: NSImage, fileName: String = "snapshot") -> URL? {
                 
-        let properties = [NSBitmapImageRep.PropertyKey.compressionFactor: 1.0]
+        let properties = [NSBitmapImageRep.PropertyKey.compressionFactor: Config.snapshotCompressionFactor]
         
         guard let imageData = image.tiffRepresentation else {
             print("no tiff rep")
@@ -73,7 +68,7 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
         
         do {
             try fileData.write(to: filePath, options: .atomic)
-            print("written")
+            print("written: \(fileName)")
         } catch {
             print(error)
             print("failed to write data")
@@ -84,12 +79,12 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
     
     private func filePath(key: String) -> URL? {
         let fileManager = FileManager.default
-        guard let fileBaseDirectory = fileManager.urls(for: .picturesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first else { return nil }
-        let fileDirectory = fileBaseDirectory.appendingPathComponent("Webcam", isDirectory: true)
+        guard let fileBaseDirectory = fileManager.urls(for: Config.searchPath, in: FileManager.SearchPathDomainMask.userDomainMask).first else { return nil }
+        let fileDirectory = fileBaseDirectory.appendingPathComponent(Config.subDirectoryName, isDirectory: true)
         if !fileManager.fileExists(atPath: fileDirectory.path) {
             try! fileManager.createDirectory(at: fileDirectory, withIntermediateDirectories: true)
         }
-        return fileDirectory.appendingPathComponent(key).appendingPathExtension("jpg")
+        return fileDirectory.appendingPathComponent(key).appendingPathExtension(Config.snapshotExtension)
     }
     
     /**
@@ -108,8 +103,14 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
             let response = try await twitter.upload(data: data)
             debugPrint(response)
             let mediaId = response.media_id_string!
-            let response2 = try await twitter.update(status: "\(Date()) (Wifi: \(lm.getSSID())", media_ids: [mediaId], coordinates: ((lm.lastLocation?.coordinate.latitude)! as Double, (lm.lastLocation?.coordinate.longitude)! as Double))
+            let response2 = try await twitter.update(status: "\(Date()) (Wifi: \(lm.getSSID()))", media_ids: [mediaId], coordinates: ((lm.lastLocation?.coordinate.latitude)! as Double, (lm.lastLocation?.coordinate.longitude)! as Double))
             debugPrint(response2)
+            
+            if Config.isDebug {
+                debugPrint("Delete tweet")
+                let _ = try await twitter.destroy(id: response2.id_str!)
+                debugPrint("Tweet destroyed")
+            }
         }
         catch {
             print("error: \(error.localizedDescription)")
@@ -119,13 +120,13 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
     
     private func readCredentials() -> TwitterCredentials {
         let fileManager = FileManager.default
-        guard let fileBaseDirectory = fileManager.urls(for: .picturesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first else { fatalError("Could not read twitter credentials") }
-        let fileDirectory = fileBaseDirectory.appendingPathComponent("Webcam", isDirectory: true)
+        guard let fileBaseDirectory = fileManager.urls(for: Config.searchPath, in: FileManager.SearchPathDomainMask.userDomainMask).first else { fatalError("Could not read twitter credentials") }
+        let fileDirectory = fileBaseDirectory.appendingPathComponent(Config.subDirectoryName, isDirectory: true)
         if !fileManager.fileExists(atPath: fileDirectory.path) {
             try! fileManager.createDirectory(at: fileDirectory, withIntermediateDirectories: true)
         }
-        let key = ".twitterCred"
-        let file = fileDirectory.appendingPathComponent(key).appendingPathExtension("json")
+        let key = Config.Twitter.credentialsFilename
+        let file = fileDirectory.appendingPathComponent(key)
         
         let data: Data
         do {
@@ -150,11 +151,10 @@ class Capturer {
     var cameraDevice: AVCaptureDevice?
     var photoOutput: AVCapturePhotoOutput?
     
-    let captDel = CaptureDel()
-    
-//    var lm: LocationManager?
+    let captDel:AVCapturePhotoCaptureDelegate
     
     init() {
+        captDel = CaptureDel()
         print("Capturer is running")
     }
     
@@ -178,14 +178,13 @@ class Capturer {
     }
     
     func takePhoto() {
-        print(captureConnection?.isActive ?? "notActive")
+        debugPrint(captureConnection?.isActive ?? "no active connection")
         let photoSettings = AVCapturePhotoSettings()
-        print("take photo")
+        debugPrint("take photo")
 
-        photoOutput?.capturePhoto(with: photoSettings, delegate: captDel) 
-//        print("error while capturePhoto")
+        photoOutput?.capturePhoto(with: photoSettings, delegate: captDel)
         
-        print("took photo?")
+        debugPrint("photo process delegated")
     }
     
     func prepareCamera() {
@@ -194,7 +193,6 @@ class Capturer {
 //        captDel = CaptureDel()
         captureSession!.sessionPreset = AVCaptureSession.Preset.photo
         do {
-//            lm = LocationManager()
             let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.front)
             let cameraDevice = deviceDiscoverySession.devices[0]
             let videoInput = try AVCaptureDeviceInput(device: cameraDevice)

@@ -6,9 +6,14 @@
 //
 
 import Foundation
-//import _Concurrency
 import CryptoKit
-import AppKit
+
+struct TwitterCredentials: Decodable {
+    var consumerKey: String
+    var consumerSecret: String
+    var oauthToken: String
+    var oauthTokenSecret: String
+}
 
 enum TwitterAPIError: Error {
     case error
@@ -26,12 +31,6 @@ struct ErrorResponse: Decodable {
     var errors: [TwitterError]
 }
 
-struct StatusResponse: Decodable {
-    var created_at: String?
-    var id_str: String?
-    var text: String?
-}
-
 struct JSONResponse: Decodable {
     var created_at: String?
     var id_str: String?
@@ -39,17 +38,11 @@ struct JSONResponse: Decodable {
     var media_id_string: String?
 }
 
-struct APIResponse<T: Decodable>: Decodable {
-    var data:T
-}
-
 class Twitter {
     // MARK: -- endpoints
     private let STATUSES_UPDATE = "statuses/update"
     private let STATUSES_DESTROY = "statuses/destroy"
     private let MEDIA_UPLOAD = "media/upload"
-    
-    private let USER_ID = "71585979"
     
     // MARK: -- instances
     private var connection: TwitterOAuth
@@ -77,16 +70,18 @@ class Twitter {
     }
     
     func upload(data: String, mediaCategory: String = "tweet_image") async throws -> JSONResponse {
-        let parameters: Dictionary<String, String> = [
+        var parameters: Dictionary<String, String> = [
             "media_data": data,
             "media_category": mediaCategory,
-            "additional_owners": USER_ID, // user-id
         ];
+        if Config.Twitter.additional_owners != nil {
+            parameters["additional_owners"] = Config.Twitter.additional_owners
+        }
         return try await connection.upload(path: MEDIA_UPLOAD, parameters: parameters)
     }
 }
 
-class Utils {
+private class Utils {
     static func generateNonce() -> String {
         let inputData = "\(Date())adsf".data(using: String.Encoding.utf8) ?? Data()
         let hashedData = Insecure.MD5.hash(data: inputData)

@@ -18,12 +18,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
 //        NSApplication.shared.activate(ignoringOtherApps: true)
 
-        print("app did finsih loading")
         capturer.prepareCamera()
         capturer.startSession()
         sleep(3)
         capturer.takePhoto()
-        print("finnnnn")
 
 //        NSApplication.shared.activate(ignoringOtherApps: true)
     }

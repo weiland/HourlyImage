@@ -16,6 +16,7 @@
 		CD86C43F27F4CF4D00173695 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C43E27F4CF4D00173695 /* LocationManager.swift */; };
 		CD86C44127F4CFCB00173695 /* Twitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C44027F4CFCB00173695 /* Twitter.swift */; };
 		CD86C44A27F4D9A800173695 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C44927F4D9A800173695 /* Shell.swift */; };
+		CD86C44C27F4FF0700173695 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C44B27F4FF0700173695 /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		CD86C44027F4CFCB00173695 /* Twitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Twitter.swift; sourceTree = "<group>"; };
 		CD86C44227F4D19700173695 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CD86C44927F4D9A800173695 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
+		CD86C44B27F4FF0700173695 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				CD86C44227F4D19700173695 /* Info.plist */,
 				CD86C42B27F4CD5800173695 /* HourlyImageApp.swift */,
 				CD86C42D27F4CD5800173695 /* ContentView.swift */,
+				CD86C44B27F4FF0700173695 /* Config.swift */,
 				CD86C43A27F4CD9100173695 /* AppDelegate.swift */,
 				CD86C43C27F4CE8500173695 /* Capturer.swift */,
 				CD86C44927F4D9A800173695 /* Shell.swift */,
@@ -161,6 +164,7 @@
 				CD86C44127F4CFCB00173695 /* Twitter.swift in Sources */,
 				CD86C42E27F4CD5800173695 /* ContentView.swift in Sources */,
 				CD86C43F27F4CF4D00173695 /* LocationManager.swift in Sources */,
+				CD86C44C27F4FF0700173695 /* Config.swift in Sources */,
 				CD86C42C27F4CD5800173695 /* HourlyImageApp.swift in Sources */,
 				CD86C43D27F4CE8500173695 /* Capturer.swift in Sources */,
 			);
