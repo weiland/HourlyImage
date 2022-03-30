@@ -21,6 +21,8 @@ Create a `.twitterCred.json` at `~/Pictures/Webcam/` and fill it with a Twitter 
 
 An example file can be found at `./.twitterCred.json.example`. You can move and edit the file: `mv ./.twitterCred.json.example ~/Pictures/Webcam/.twitterCred.json`
 
+You can set some settings in the `Config.swift`.
+
 
 Build via XcodeBuild (cli):
 
@@ -48,7 +50,7 @@ You can also install a cronjob which runs on every hour (`crontab -e`) like foll
 
 ### Why?
 
-I like to keep track of what I'm doing and where I am. And it's just a habit I'm doing since 
+I like to keep track of what I'm doing and where I am. And it's just a habit I'm doing since I got a device with a webcam.
 
 
 ## License
