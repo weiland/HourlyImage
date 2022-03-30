@@ -11,6 +11,11 @@
 		CD86C42E27F4CD5800173695 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C42D27F4CD5800173695 /* ContentView.swift */; };
 		CD86C43027F4CD5800173695 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD86C42F27F4CD5800173695 /* Assets.xcassets */; };
 		CD86C43327F4CD5800173695 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD86C43227F4CD5800173695 /* Preview Assets.xcassets */; };
+		CD86C43B27F4CD9100173695 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C43A27F4CD9100173695 /* AppDelegate.swift */; };
+		CD86C43D27F4CE8500173695 /* Capturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C43C27F4CE8500173695 /* Capturer.swift */; };
+		CD86C43F27F4CF4D00173695 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C43E27F4CF4D00173695 /* LocationManager.swift */; };
+		CD86C44127F4CFCB00173695 /* Twitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C44027F4CFCB00173695 /* Twitter.swift */; };
+		CD86C44A27F4D9A800173695 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86C44927F4D9A800173695 /* Shell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +25,12 @@
 		CD86C42F27F4CD5800173695 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD86C43227F4CD5800173695 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CD86C43427F4CD5800173695 /* HourlyImage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HourlyImage.entitlements; sourceTree = "<group>"; };
+		CD86C43A27F4CD9100173695 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CD86C43C27F4CE8500173695 /* Capturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capturer.swift; sourceTree = "<group>"; };
+		CD86C43E27F4CF4D00173695 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		CD86C44027F4CFCB00173695 /* Twitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Twitter.swift; sourceTree = "<group>"; };
+		CD86C44227F4D19700173695 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CD86C44927F4D9A800173695 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +63,14 @@
 		CD86C42A27F4CD5800173695 /* HourlyImage */ = {
 			isa = PBXGroup;
 			children = (
+				CD86C44227F4D19700173695 /* Info.plist */,
 				CD86C42B27F4CD5800173695 /* HourlyImageApp.swift */,
 				CD86C42D27F4CD5800173695 /* ContentView.swift */,
+				CD86C43A27F4CD9100173695 /* AppDelegate.swift */,
+				CD86C43C27F4CE8500173695 /* Capturer.swift */,
+				CD86C44927F4D9A800173695 /* Shell.swift */,
+				CD86C44027F4CFCB00173695 /* Twitter.swift */,
+				CD86C43E27F4CF4D00173695 /* LocationManager.swift */,
 				CD86C42F27F4CD5800173695 /* Assets.xcassets */,
 				CD86C43427F4CD5800173695 /* HourlyImage.entitlements */,
 				CD86C43127F4CD5800173695 /* Preview Content */,
@@ -139,8 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD86C43B27F4CD9100173695 /* AppDelegate.swift in Sources */,
+				CD86C44A27F4D9A800173695 /* Shell.swift in Sources */,
+				CD86C44127F4CFCB00173695 /* Twitter.swift in Sources */,
 				CD86C42E27F4CD5800173695 /* ContentView.swift in Sources */,
+				CD86C43F27F4CF4D00173695 /* LocationManager.swift in Sources */,
 				CD86C42C27F4CD5800173695 /* HourlyImageApp.swift in Sources */,
+				CD86C43D27F4CE8500173695 /* Capturer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +296,13 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HourlyImage/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take a photo";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need the location for the tweet";
+				INFOPLIST_KEY_NSLocationUsageDescription = "We need the location for the tweet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -301,7 +329,13 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HourlyImage/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take a photo";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need the location for the tweet";
+				INFOPLIST_KEY_NSLocationUsageDescription = "We need the location for the tweet";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
