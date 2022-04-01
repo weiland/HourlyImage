@@ -35,6 +35,7 @@ struct Config {
     struct Twitter {
         /// send tweet if enabled
         static let enabled = true
+        static let dateFormat = "EEE MMM dd y HH:mm:ss v"
         static let includeLocation = true
         static let includeWifiName = true // requires Location
         /// Twitter UserId of additional owner of media

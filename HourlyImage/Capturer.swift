@@ -103,7 +103,9 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
             let response = try await twitter.upload(data: data)
             debugPrint(response)
             let mediaId = response.media_id_string!
-            let response2 = try await twitter.update(status: "\(Date()) (Wifi: \(lm.getSSID()))", media_ids: [mediaId], coordinates: ((lm.lastLocation?.coordinate.latitude)! as Double, (lm.lastLocation?.coordinate.longitude)! as Double))
+            let df = DateFormatter()
+            df.setLocalizedDateFormatFromTemplate(Config.Twitter.dateFormat)
+            let response2 = try await twitter.update(status: "\(df.string(from: Date())) (Wifi: \(lm.getSSID()))", media_ids: [mediaId], coordinates: ((lm.lastLocation?.coordinate.latitude)! as Double, (lm.lastLocation?.coordinate.longitude)! as Double))
             debugPrint(response2)
             
             if Config.isDebug {
