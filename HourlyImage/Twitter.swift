@@ -52,11 +52,11 @@ class Twitter {
         connection = TwitterOAuth(consumerKey: consumerKey, consumerSecret: consumerSecret, oauthToken: oauthToken, oauthTokenSecret: oauthTokenSecret)
     }
     
-    func update(status: String, media_ids: [String] = [], coordinates: (Double, Double)) async throws -> JSONResponse {
+    func update(status: String, media_ids: [String] = [], coordinates: (Double, Double)?) async throws -> JSONResponse {
         var parameters:Dictionary<String, String> = [
             "status": status,
-            "lat": "\(coordinates.0)",
-            "long": "\(coordinates.1)",
+            "lat": "\(coordinates?.0 ?? 0.0)",
+            "long": "\(coordinates?.1 ?? 0.0)",
             "display_coordinates": "true",
         ]
         if !media_ids.isEmpty {

@@ -100,17 +100,19 @@ class CaptureDel: NSObject, AVCapturePhotoCaptureDelegate {
                               oauthTokenSecret: creds.oauthTokenSecret)
         do {
             print(lm.statusString)
-            let response = try await twitter.upload(data: data)
-            debugPrint(response)
-            let mediaId = response.media_id_string!
+            let mediaResponse = try await twitter.upload(data: data)
+            debugPrint(mediaResponse)
+            guard let mediaId = mediaResponse.media_id_string else { throw TwitterAPIError.message("did not receive mediaId") }
             let df = DateFormatter()
             df.setLocalizedDateFormatFromTemplate(Config.Twitter.dateFormat)
-            let response2 = try await twitter.update(status: "\(df.string(from: Date())) (Wifi: \(lm.getSSID()))", media_ids: [mediaId], coordinates: ((lm.lastLocation?.coordinate.latitude)! as Double, (lm.lastLocation?.coordinate.longitude)! as Double))
-            debugPrint(response2)
+            let status = "\(df.string(from: Date())) (Wifi: \(lm.getSSID()))"
+            let coordinates:(Double, Double) = ((lm.lastLocation?.coordinate.latitude ?? 1.1) as Double, (lm.lastLocation?.coordinate.longitude ?? 1.1) as Double)
+            let tweetResponse = try await twitter.update(status: status, media_ids: [mediaId], coordinates: coordinates)
+            debugPrint(tweetResponse)
             
             if Config.isDebug {
                 debugPrint("Delete tweet")
-                let _ = try await twitter.destroy(id: response2.id_str!)
+                let _ = try await twitter.destroy(id: tweetResponse.id_str!)
                 debugPrint("Tweet destroyed")
             }
         }

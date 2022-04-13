@@ -39,7 +39,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func getSSID() -> String {
-        return wifiClient.interface()?.ssid() ?? ""
+        return wifiClient.interface()?.ssid() ?? "(no SSID found)"
     }
     
     func request() {
