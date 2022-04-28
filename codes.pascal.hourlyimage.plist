@@ -8,12 +8,12 @@
 		<array>
 			<string>/usr/bin/open</string>
 			<string>-W</string>
-			<string>/Applications/Safari.app</string>
+			<string>/Users/pw/src/swift/HourlyImage/build/Release/HourlyImage.app</string>
 		</array>
 		<key>StartCalendarInterval</key>
 		<dict>
 			<key>Minute</key>
-			<integer>0</integer>
+			<integer>33</integer>
 		</dict>
 	</dict>
 </plist>
